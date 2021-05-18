@@ -5,11 +5,12 @@ import org.bravo.monitoringavailability.configuration.properties.HttpPingPropert
 import org.bravo.monitoringavailability.dto.FindNewsRequest
 import org.bravo.monitoringavailability.dto.Pagination
 import org.slf4j.LoggerFactory
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
+import reactor.util.function.component1
+import reactor.util.function.component2
 
 @Service
 class HttpPingService(
@@ -17,34 +18,42 @@ class HttpPingService(
     private val httpPingProperties: HttpPingProperties
 ) {
 
-    suspend fun ping(): Boolean =
+    suspend fun ping() =
         pingTo(httpPingProperties.url)
 
-    suspend fun pingTo(url: String): Boolean {
+    suspend fun pingTo(url: String): Pair<Long, Boolean> {
         return executePing(url)
     }
 
-    private suspend fun executePing(url: String): Boolean {
+    /**
+     * @return pair - first is elapsed time, second is available.
+     */
+    private suspend fun executePing(url: String): Pair<Long, Boolean> {
         repeat(httpPingProperties.countRepeat) {
-            val isOk = runCatching {
+            val (elapsed, isOk) = runCatching {
                 webClient.post()
                     .uri(url)
                     .bodyValue(request)
                     .accept(MediaType.APPLICATION_JSON)
                     .exchangeToMono { response ->
-                        Mono.just(response.statusCode() == HttpStatus.OK)
+                        Mono.just(response.statusCode().is2xxSuccessful)
                     }
+                    .elapsed()
+                    .retry(httpPingProperties.countRepeat.toLong())
+                    .map { (elapsed, isOk) -> elapsed to isOk }
+                    .defaultIfEmpty(0L to false)
+                    .awaitFirst()
             }.getOrElse { error ->
                 logger.warn("Can not http ping to $url: ${error.message}")
-                return false
-            }.awaitFirst()
+                return 0L to false
+            }
 
             if (isOk) {
-                return true
+                return elapsed to isOk
             }
         }
 
-        return false
+        return 0L to false
     }
 
     companion object {

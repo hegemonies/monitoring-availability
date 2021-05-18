@@ -18,9 +18,9 @@ repositories {
 
 dependencies {
     // Spring
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-quartz")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("com.influxdb:influxdb-client-kotlin:2.2.0")
 
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -38,9 +38,6 @@ dependencies {
 
     // Annotation properties
     kapt("org.springframework.boot:spring-boot-configuration-processor")
-
-    // Storage
-    runtimeOnly("io.micrometer:micrometer-registry-influx")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")

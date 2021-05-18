@@ -5,19 +5,26 @@ import org.icmp4j.IcmpPingRequest
 import org.icmp4j.IcmpPingUtil
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import kotlin.system.measureTimeMillis
 
 @Service
 class IcmpPingService(
     private val icmpPingProperties: IcmpPingProperties
 ) {
 
-    fun ping(): Boolean =
+    fun ping(): Pair<Long, Boolean> =
         pingTo(icmpPingProperties.host)
 
-    fun pingTo(ip: String): Boolean {
+    fun pingTo(ip: String): Pair<Long, Boolean> {
         val request = createRequest(ip)
 
-        return executePing(request)
+        var available = false
+
+        val elapsed = measureTimeMillis {
+            available = executePing(request)
+        }
+
+        return elapsed to available
     }
 
     private fun createRequest(ip: String): IcmpPingRequest =
