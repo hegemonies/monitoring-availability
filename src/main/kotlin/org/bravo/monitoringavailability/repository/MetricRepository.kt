@@ -18,7 +18,7 @@ class MetricRepository(
             influxDBClient.getWriteKotlinApi()
                 .writeMeasurement(
                     measurement = point,
-                    precision = WritePrecision.MS,
+                    precision = WritePrecision.NS,
                     bucket = influxdbProperties.bucket,
                     org = influxdbProperties.org
                 )

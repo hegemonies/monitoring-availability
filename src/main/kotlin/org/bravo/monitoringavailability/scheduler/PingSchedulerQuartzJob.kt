@@ -41,13 +41,15 @@ class PingSchedulerQuartzJob(
     suspend fun executeHttpPing() {
         logger.debug("Execute HTTP ping")
 
+        val time = Instant.now()
+
         val (elapsedTime, available) = httpPingService.ping()
 
         val point = PingPoint(
             host = httpPingProperties.url,
             responseTime = elapsedTime,
             available = available,
-            time = Instant.now(),
+            time = time,
             method = PingMethod.HTTP.methodName
         )
 
@@ -61,13 +63,15 @@ class PingSchedulerQuartzJob(
     suspend fun executeIcmpPing() {
         logger.debug("Execute ICMP ping")
 
+        val time = Instant.now()
+
         val (elapsedTime, available) = icmpPingService.ping()
 
         val point = PingPoint(
             host = icmpPingProperties.host,
             responseTime = elapsedTime,
             available = available,
-            time = Instant.now(),
+            time = time,
             method = PingMethod.ICMP.methodName
         )
 

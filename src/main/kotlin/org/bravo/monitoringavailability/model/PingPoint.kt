@@ -6,7 +6,7 @@ import java.time.Instant
 
 @Measurement(name = "ping")
 data class PingPoint(
-    @Column
+    @Column(tag = true)
     val host: String,
 
     @Column(name = "response-time")
@@ -18,6 +18,6 @@ data class PingPoint(
     @Column(timestamp = true)
     val time: Instant,
 
-    @Column
+    @Column(tag = true)
     val method: String
 )
