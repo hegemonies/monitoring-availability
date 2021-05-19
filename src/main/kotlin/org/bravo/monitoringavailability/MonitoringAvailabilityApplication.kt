@@ -1,11 +1,13 @@
 package org.bravo.monitoringavailability
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class MonitoringavailabilityApplication
+@ConfigurationPropertiesScan
+class MonitoringAvailabilityApplication
 
 fun main(args: Array<String>) {
-	runApplication<MonitoringavailabilityApplication>(*args)
+    runApplication<MonitoringAvailabilityApplication>(*args)
 }
