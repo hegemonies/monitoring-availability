@@ -1,0 +1,56 @@
+version: '2'
+
+services:
+
+  influxdb:
+    image: influxdb:2.0.6-alpine
+    restart: always
+    environment:
+      DOCKER_INFLUXDB_INIT_USERNAME: bravo
+      DOCKER_INFLUXDB_INIT_PASSWORD: password
+      DOCKER_INFLUXDB_INIT_ORG: bravo
+      DOCKER_INFLUXDB_INIT_BUCKET: bravo
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: bravo
+      DOCKER_INFLUXDB_INIT_MODE: setup
+    mem_limit: 128m
+    ports:
+      - 8086:8086
+    networks:
+      - monitoring_availability_network
+
+  monitoringavailability:
+    image: bravo/monitoringavailability:latest
+    restart: always
+    environment:
+      PING_ICMP_HOST: localhost
+      PING_HTTP_URL: http://localhost:8000/
+      SCHEDULER_PING-INTERVAL: 5s
+      INFLUXDB_URL: http://influxdb:8086
+      LOGGING_LEVEL_ORG_BRAVO: INFO
+    mem_limit: 256m
+    networks:
+      - monitoring_availability_network
+
+#  telegraf:
+#    image: telegraf:1.15-alpine
+#    restart: always
+#    environment:
+#      USER: bravo
+#      INFLUX_URL: influxdb
+#      INFLUX_USER: bravo
+#      INFLUX_PASSWORD: bravo
+#      HOST_PROC: /rootfs/proc
+#      HOST_SYS: /rootfs/sys
+#      HOST_ETC: /rootfs/etc
+#      HOSTNAME: hostname
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+#      - /sys:/rootfs/sys:ro
+#      - /proc:/rootfs/proc:ro
+#      - /etc:/rootfs/etc:ro
+#    networks:
+#      - monitoring_availability_network
+
+networks:
+  monitoring_availability_network:
