@@ -54,18 +54,18 @@ public class Icmp4jJNI {
   public native String icmp_test ();
 
   // Test Driver   
-//  public static void main (String args[]) {
-//    Icmp4jJNI test = new Icmp4jJNI ();
-//    test.host = "google.com";
-//    test.ttl = 50;
-//    test.packetSize = 64;
-//    test.timeOut = 9876;
-//    test.icmp_start ();
-//    System.out.println ("retCode: " + test.retCode);
-//    System.out.println ("errorMsg: " + test.errorMsg);
-//    System.out.println ("ttl: " + test.returnTtl);
-//    System.out.println ("rtt: " + test.rtt);
-//    System.out.println ("bytes: " + test.bytes);
-//    System.out.println ("address is: " + test.address);
-//  }
+  public static void main (String args[]) {
+    Icmp4jJNI test = new Icmp4jJNI ();
+    test.host = "google.com";
+    test.ttl = 50;
+    test.packetSize = 64;
+    test.timeOut = 9876;
+    test.icmp_start ();
+    System.out.println ("retCode: " + test.retCode);
+    System.out.println ("errorMsg: " + test.errorMsg);
+    System.out.println ("ttl: " + test.returnTtl);
+    System.out.println ("rtt: " + test.rtt);
+    System.out.println ("bytes: " + test.bytes);
+    System.out.println ("address is: " + test.address);
+  }
 }

@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "1.5.0"
     kotlin("plugin.spring") version "1.5.0"
     kotlin("kapt") version "1.5.0" apply true
+    id("com.google.cloud.tools.jib") version "3.0.0"
 }
 
 group = "org.bravo"
@@ -56,4 +57,28 @@ tasks.withType<Test> {
 
 tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootBuildImage> {
     this.imageName = "bravo/monitoringavailability:latest"
+}
+
+tasks.withType<org.gradle.jvm.tasks.Jar> {
+    manifest {
+        attributes("Main-Class" to "org.bravo.monitoringavailability.MonitoringAvailabilityApplicationKt")
+    }
+}
+
+springBoot {
+    mainClassName = "org.bravo.monitoringavailability.MonitoringAvailabilityApplicationKt"
+}
+
+jib {
+    container {
+        this.mainClass = "org.bravo.monitoringavailability.MonitoringAvailabilityApplicationKt"
+    }
+
+    from {
+        image = "openjdk:11.0.11-jre"
+    }
+
+    to {
+        this.image = "bravo/monitoringavailability:latest"
+    }
 }

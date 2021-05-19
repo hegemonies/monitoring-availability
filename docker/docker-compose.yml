@@ -1,4 +1,4 @@
-version: '3.9'
+version: '2'
 
 services:
 
@@ -12,13 +12,14 @@ services:
       DOCKER_INFLUXDB_INIT_BUCKET: bravo
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: bravo
       DOCKER_INFLUXDB_INIT_MODE: setup
+    mem_limit: 128m
     ports:
       - 8086:8086
     networks:
       - monitoring_availability_network
 
   monitoringavailability:
-    image: lt:5000/monitoringavailability:latest
+    image: bravo/monitoringavailability:latest
     restart: always
     environment:
       PING_ICMP_HOST: localhost
@@ -26,6 +27,7 @@ services:
       SCHEDULER_PING-INTERVAL: 5s
       INFLUXDB_URL: http://influxdb:8086
       LOGGING_LEVEL_ORG_BRAVO: INFO
+    mem_limit: 256m
     networks:
       - monitoring_availability_network
 
