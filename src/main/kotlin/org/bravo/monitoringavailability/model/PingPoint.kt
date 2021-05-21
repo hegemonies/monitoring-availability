@@ -20,4 +20,9 @@ data class PingPoint(
 
     @Column(tag = true)
     val method: String
-)
+) {
+
+    companion object {
+        fun getMeasurementName() = "ping"
+    }
+}
