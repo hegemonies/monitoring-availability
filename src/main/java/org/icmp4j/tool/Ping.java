@@ -51,42 +51,42 @@ public class Ping {
    *
    * @param args
    */
-  public static void main (final String[] args){
-
-    // handle exceptions
-    try {
-
-      // extract request parameters
-      // -t: windows ping.exe repeats until stopped, otherwise default to 4
-      final String host = args.length > 0 ?
-        args [args.length - 1] :
-        "google.com";
-      final int maxCount = ArgUtil.findArgument (args, "-t") ?
-        Integer.MAX_VALUE :
-        4;
-
-      // request
-      final IcmpPingRequest request = IcmpPingUtil.createIcmpPingRequest ();
-      request.setHost (host);
-
-      // repeat 4 times by default
-      for (int count = 1; count <= maxCount; count ++) {
-
-        // delegate
-        final IcmpPingResponse response = IcmpPingUtil.executePingRequest (request);
-
-        // log
-        final String formattedResponse = IcmpPingUtil.formatResponse (response);
-        System.out.println (formattedResponse);
-
-        // rest
-        Thread.sleep (1000);
-      }
-    }
-    catch (final Throwable t){
-
-      // log
-      t.printStackTrace ();
-    }
-  }
+//  public static void main (final String[] args){
+//
+//    // handle exceptions
+//    try {
+//
+//      // extract request parameters
+//      // -t: windows ping.exe repeats until stopped, otherwise default to 4
+//      final String host = args.length > 0 ?
+//        args [args.length - 1] :
+//        "google.com";
+//      final int maxCount = ArgUtil.findArgument (args, "-t") ?
+//        Integer.MAX_VALUE :
+//        4;
+//
+//      // request
+//      final IcmpPingRequest request = IcmpPingUtil.createIcmpPingRequest ();
+//      request.setHost (host);
+//
+//      // repeat 4 times by default
+//      for (int count = 1; count <= maxCount; count ++) {
+//
+//        // delegate
+//        final IcmpPingResponse response = IcmpPingUtil.executePingRequest (request);
+//
+//        // log
+//        final String formattedResponse = IcmpPingUtil.formatResponse (response);
+//        System.out.println (formattedResponse);
+//
+//        // rest
+//        Thread.sleep (1000);
+//      }
+//    }
+//    catch (final Throwable t){
+//
+//      // log
+//      t.printStackTrace ();
+//    }
+//  }
 }

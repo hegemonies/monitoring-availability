@@ -1,19 +1,27 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.4.5"
+    id("org.springframework.boot") version "2.5.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.5.0"
     kotlin("plugin.spring") version "1.5.0"
     kotlin("kapt") version "1.5.0" apply true
     id("com.google.cloud.tools.jib") version "3.0.0"
+    id("org.springframework.experimental.aot") version "0.10.0-SNAPSHOT"
 }
 
 group = "org.bravo"
-version = "0.0.1-SNAPSHOT"
+version = "1.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
+configurations {
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
+}
+
 repositories {
+    maven { url = uri("https://repo.spring.io/snapshot") }
     mavenCentral()
 }
 
@@ -56,7 +64,10 @@ tasks.withType<Test> {
 }
 
 tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootBuildImage> {
+//    this.builder = "openjdk:11.0.11-jre"
+    this.builder = "hegemonies/native-builder:latest"
     this.imageName = "bravo/monitoringavailability:latest"
+    environment = mapOf("BP_NATIVE_IMAGE" to "true")
 }
 
 tasks.withType<org.gradle.jvm.tasks.Jar> {

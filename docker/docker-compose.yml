@@ -19,7 +19,7 @@ services:
       - monitoring_availability_network
 
   monitoringavailability:
-    image: bravo/monitoringavailability:latest
+    image: docker.io/bravo/monitoringavailability:latest
     restart: always
     environment:
       PING_ICMP_HOST: localhost
